@@ -1,0 +1,31 @@
+{
+  "hints": [],
+  "groups": [],
+  "properties": [
+    {
+      "name": "file.upload-dir",
+      "description": "Description for file.upload-dir.",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "spring.servlet.multipart.enabled",
+      "description": "Description for spring.servlet.multipart.enabled.",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "spring.servlet.multipart.file-size-threshold",
+      "description": "Description for spring.servlet.multipart.file-size-threshold.",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "spring.servlet.multipart.max-file-size",
+      "description": "Description for spring.servlet.multipart.max-file-size.",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "spring.servlet.multipart.max-request-size",
+      "description": "Description for spring.servlet.multipart.max-request-size.",
+      "type": "java.lang.String"
+    }
+  ]
+}
