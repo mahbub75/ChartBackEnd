@@ -1,4 +1,5 @@
 package Project.Login;
+import Project.ExceptionHandler.CustomException;
 import Project.User.User;
 import Project.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,14 @@ public class LoginController {
 
     @PostMapping("/login")
     @CrossOrigin
-    public User login(@RequestBody Map<String, String> body){
+    public User login(@RequestBody Map<String, String> body) throws Exception{
         String name = body.get("name");
         String password = body.get("password");
-        return userRepository.findByNameAndPassword(name,password);
+        User user = userRepository.findByNameAndPassword(name,password);
+        if(user==null){
+            throw new CustomException("نام کاربری یا رمز عبور اشتباه است");
+        }
+        return user;
     }
 
 
