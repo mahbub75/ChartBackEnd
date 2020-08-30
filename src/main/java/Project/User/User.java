@@ -1,6 +1,8 @@
 package Project.User;
 
 import Project.Lesson.Lesson;
+import Project.Session.Session;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -14,16 +16,21 @@ public class User implements Serializable {
     private String password;
     private String name;
     private String first_last_name;
+    @ManyToOne
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    Set<Lesson> lessons = new HashSet<Lesson>();
+    Set<Session> sessions = new HashSet<Session>();
+
 
     public User() {
     }
 
-    public User(String name, String password, String first_last_name) {
+    public User(String name, String password, String first_last_name,Lesson lesson) {
         this.setName(name);
         this.setName(password);
         this.setFirstLastName(first_last_name);
+        this.setLesson(lesson);
     }
 
     public User(int id, String name, String password, String first_last_name) {
@@ -64,7 +71,13 @@ public class User implements Serializable {
     public void setFirstLastName(String first_last_name) {
         this.first_last_name = first_last_name;
     }
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
+    }
 
+    public Lesson getLesson() {
+        return lesson;
+    }
     @Override
     public String toString() {
         return "Blog{" +

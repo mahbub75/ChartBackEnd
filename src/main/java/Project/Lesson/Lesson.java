@@ -17,11 +17,9 @@ public class Lesson {
     private int id;
     private String name;
     private String teacher_info;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    Set<Session> sessions = new HashSet<Session>();
+    Set<User> users = new HashSet<User>();
 
     public Lesson() {
     }
@@ -30,10 +28,9 @@ public class Lesson {
         this.setName(name);
     }
 
-    public Lesson(String name, String teacher_info, User user) {
+    public Lesson(String name, String teacher_info) {
         this.setName(name);
         this.setTeacherInfo(teacher_info);
-        this.setUser(user);
     }
 
     public int getId() {
@@ -60,10 +57,4 @@ public class Lesson {
         this.teacher_info = teacherInfo;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-    public User getUser() {
-        return user;
-    }
 }

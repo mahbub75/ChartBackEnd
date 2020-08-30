@@ -2,6 +2,7 @@ package Project.Session;
 
 import Project.Files.FileModel;
 import Project.Lesson.Lesson;
+import Project.User.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,8 +15,8 @@ public class Session {
     private int id;
     private String topic;
     @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
+    @JoinColumn(name = "user_id")
+    private User user;
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     Set<FileModel> file = new HashSet<FileModel>();
 
@@ -28,9 +29,9 @@ public class Session {
         this.setTopic(topic);
     }
 
-    public Session(String topic, Lesson lesson) {
+    public Session(String topic, User user) {
         this.setTopic(topic);
-        this.setLesson(lesson);
+        this.setUser(user);
 
     }
 
@@ -51,11 +52,11 @@ public class Session {
         this.topic = topic;
     }
 
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public User getUser() {
+        return user;
     }
 }
