@@ -17,25 +17,25 @@ public class LessonController {
     LessonRepository lessonRepository;
     UserRepository userRepository;
 
-    @GetMapping("user/{userId}/lessons")
-    @CrossOrigin
-    public List<Lesson> index(@PathVariable int userId){
+//    @GetMapping("user/{userId}/lessons")
+//    @CrossOrigin
+//    public List<Lesson> index(@PathVariable int userId){
+//
+//        return lessonRepository.findByUser_id(userId);
+//    }
 
-        return lessonRepository.findByUser_id(userId);
-    }
-
-    @PostMapping("lesson")
-    @CrossOrigin
-    public void create(@RequestBody Map<String, String> body){
-        String name = body.get("name");
-        String teacherInfo = body.get("teacher_info");
-        int userId= Integer.parseInt( body.get("user_id"));
-        User user = userRepository.findOne(userId);
-        lessonRepository.save(new Lesson(name,teacherInfo,user));
-    }
+//    @PostMapping("lesson")
+//    @CrossOrigin
+//    public void create(@RequestBody Map<String, String> body){
+//        String name = body.get("name");
+//        String teacherInfo = body.get("teacher_info");
+//        int userId= Integer.parseInt( body.get("user_id"));
+//        User user = userRepository.findOne(userId);
+//        lessonRepository.save(new Lesson(name,teacherInfo,user));
+//    }
     @GetMapping("lesson/{lessonId}")
     @CrossOrigin
-    public Lesson getLesson(@PathVariable String lessonId){
-        return this.lessonRepository.getOne(Integer.parseInt(lessonId));
+    public Lesson getLesson(@PathVariable int lessonId){
+        return this.lessonRepository.getOne(lessonId);
     }
 }
