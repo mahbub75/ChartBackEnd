@@ -15,7 +15,9 @@ public class User implements Serializable {
     private int id;
     private String password;
     private String name;
-    private String first_last_name;
+    private int center_id;
+    private String members;
+    private String roll;
     @ManyToOne
     @JoinColumn(name = "lesson_id")
     private Lesson lesson;
@@ -26,19 +28,21 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String password, String first_last_name,Lesson lesson) {
+    public User(String name,String roll, Lesson lesson) {
         this.setName(name);
         this.setName(password);
-        this.setFirstLastName(first_last_name);
         this.setLesson(lesson);
+        this.setRoll(roll);
+    }
+    public User(String name,String roll, Lesson lesson,String members,int center_id) {
+        this.setName(name);
+        this.setName(password);
+        this.setLesson(lesson);
+        this.setRoll(roll);
+        this.setCenter_id(center_id);
+        this.setMembers(roll);
     }
 
-    public User(int id, String name, String password, String first_last_name) {
-        this.setId(id);
-        this.setName(name);
-        this.setPassword(password);
-        this.setFirstLastName(first_last_name);
-    }
 
     public int getId() {
         return id;
@@ -64,20 +68,25 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getFirstLastName() {
-        return first_last_name;
-    }
-
-    public void setFirstLastName(String first_last_name) {
-        this.first_last_name = first_last_name;
-    }
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public Lesson getLesson() { return lesson; }
+
+    public String getRoll() { return roll; }
+
+    public void setRoll(String roll) { this.roll = roll; }
+
+    public int getCenter_id() {
+        return center_id;
     }
+
+    public void setCenter_id(int center_id) { this.center_id = center_id; }
+
+    public String getMembers() { return members; }
+
+    public void setMembers(String members) { this.members = members; }
     @Override
     public String toString() {
         return "Blog{" +
