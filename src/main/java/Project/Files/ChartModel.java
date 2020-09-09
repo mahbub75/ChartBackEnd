@@ -1,6 +1,7 @@
 package Project.Files;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -147,13 +148,14 @@ class PlotOptions {
 
 class Series {
     String name;
-    String type = "line";
-    String color = "rgba(223, 83, 83, .5)";
+    String type = "spline";
+    String color;
     ArrayList<int[]> data = new ArrayList<int[]>();
 
-    public Series(String name) {
+    public Series(String name, ArrayList<int[]> data, String color) {
         this.setName(name);
-        this.setData();
+        this.setData(data);
+        this.setColor(color);
     }
 
     public void setName(String name) {
@@ -172,11 +174,8 @@ class Series {
         return color;
     }
 
-    public void setData() {
-        int[] d = new int[]{2, 3};
-        int[] l = new int[]{3, 10};
-        data.add(0, d);
-        data.add(0, l);
+    public void setData(ArrayList<int[]> data) {
+        this.data = data;
     }
 
     public ArrayList<int[]> getData() {
@@ -199,8 +198,8 @@ public class ChartModel {
     Chart chart;
     Title title;
     Title subtitle;
-    YAxis yAxis;
-    XAxis xAxis;
+    private YAxis yAxis;
+    private XAxis xAxis;
     Legend legend;
     PlotOptions plotOptions;
     List<Series> series;
@@ -209,11 +208,28 @@ public class ChartModel {
         this.chart = new Chart();
         this.title = new Title(title);
         this.subtitle = new Title(subTitle);
-        this.yAxis = new YAxis(yAxisTitle);
-        this.xAxis = new XAxis(xAxisTitle);
+        this.setXAxis(xAxisTitle);
+        this.setYAxis(yAxisTitle);
         this.legend = new Legend();
         this.plotOptions = new PlotOptions();
         this.series = series;
     }
+    public void setXAxis(String xAxisTitle) {
+        this.xAxis = new XAxis(xAxisTitle);
+    }
+
+    @JsonProperty("xAxis")
+    public XAxis getXAxis() {
+        return xAxis;
+    }
+    public void setYAxis(String yAxisTitle) {
+        this.yAxis = new YAxis(yAxisTitle);
+    }
+
+    @JsonProperty("yAxis")
+    public YAxis getYAxis() {
+        return yAxis;
+    }
+
 
 }

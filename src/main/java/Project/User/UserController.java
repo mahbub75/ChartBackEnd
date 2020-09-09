@@ -1,5 +1,6 @@
 package Project.User;
 
+import Project.ExceptionHandler.CustomException;
 import Project.Lesson.Lesson;
 import Project.Lesson.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,38 +12,45 @@ import java.util.Map;
 @RestController
 public class UserController {
     @Autowired
-UserRepository userRepository;
+    UserRepository userRepository;
+    @Autowired
     LessonRepository lessonRepository;
 
     @GetMapping("admin/{adminId}/teams")
     @CrossOrigin
-    public List<User> index(@PathVariable String adminId){
-        return userRepository.findByCenter_id(Integer.parseInt(adminId));
+    public List<User> index(@PathVariable String adminId, @RequestParam("lesson_id") int lessonId) {
+        Lesson lesson = lessonRepository.findOne(lessonId);
+        return userRepository.findByCenterIdAndLesson(adminId, lesson);
     }
 
 
-    @GetMapping("user/{userId}")
-    @CrossOrigin
-    public User getUserById(@PathVariable int userId){
-        return userRepository.findOne(userId);
-    }
+//    @GetMapping("user/{userId}")
+//    @CrossOrigin
+//    public User getUserById(@PathVariable int userId) {
+//        return userRepository.findOne(userId);
+//    }
+
     @DeleteMapping("user/{userId}")
     @CrossOrigin
-    public void deleteUser(@PathVariable int userId){
+    public void deleteUser(@PathVariable int userId) {
         userRepository.delete(userId);
     }
 
     @PostMapping("team")
     @CrossOrigin
-    public void create( @RequestParam("lessonId") String lessonId,@RequestBody Map<String, String> body){
+    public void create(@RequestParam("lesson_id") int lessonId, @RequestBody Map<String, String> body)throws CustomException {
         String name = body.get("name");
         String roll = body.get("roll");
         String password = body.get("password");
-        Lesson lesson = lessonRepository.findOne(Integer.parseInt(lessonId));
+        Lesson lesson = lessonRepository.findOne(lessonId);
         String members = body.get("members");
-        int center_id = Integer.parseInt(body.get("center_id"));
-
-        userRepository.save(new User(name,roll,password,lesson,members, center_id));
+        String center_id = body.get("centerId");
+        User user = new User(name, roll, password, lesson, members, center_id);
+        Boolean o = userRepository.existsByName(name);
+        if(o){
+            throw new CustomException("نام گروه باید یکتا باشد");
+        }
+        userRepository.save(user);
     }
 
 //    @PostMapping("admin")

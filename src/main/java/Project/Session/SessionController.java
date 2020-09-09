@@ -24,7 +24,7 @@ public class SessionController {
     @GetMapping("team/{teamId}/sessions")
     @CrossOrigin
     List<Session> getSessionList(@PathVariable int teamId){
-return sessionRepository.findByLesson_id(teamId);
+return sessionRepository.findByUser_id(teamId);
     }
 
     @GetMapping("session/{sessionId}")

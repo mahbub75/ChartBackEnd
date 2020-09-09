@@ -15,7 +15,7 @@ public class User implements Serializable {
     private int id;
     private String password;
     private String name;
-    private int center_id;
+    private String centerId;
     private String members;
     private String roll;
     @ManyToOne
@@ -28,19 +28,25 @@ public class User implements Serializable {
     public User() {
     }
 
+
+    public User(String name,String password) {
+        this.setName(name);
+        this.setPassword(password);
+    }
+
     public User(String name,String roll,String password, Lesson lesson) {
         this.setName(name);
         this.setPassword(password);
         this.setLesson(lesson);
         this.setRoll(roll);
     }
-    public User(String name,String roll,String password, Lesson lesson,String members,int center_id) {
+    public User(String name,String roll,String password, Lesson lesson,String members,String centerId) {
         this.setName(name);
-        this.setName(password);
+        this.setPassword(password);
         this.setLesson(lesson);
         this.setRoll(roll);
-        this.setCenter_id(center_id);
-        this.setMembers(roll);
+        this.setCenterId(centerId);
+        this.setMembers(members);
     }
 
 
@@ -78,11 +84,11 @@ public class User implements Serializable {
 
     public void setRoll(String roll) { this.roll = roll; }
 
-    public int getCenter_id() {
-        return center_id;
+    public String getCenterId() {
+        return centerId;
     }
 
-    public void setCenter_id(int center_id) { this.center_id = center_id; }
+    public void setCenterId(String centerId) { this.centerId = centerId; }
 
     public String getMembers() { return members; }
 
