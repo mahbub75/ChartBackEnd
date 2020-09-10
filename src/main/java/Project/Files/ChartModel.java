@@ -6,8 +6,10 @@ import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -150,12 +152,17 @@ class Series {
     String name;
     String type = "spline";
     String color;
-    ArrayList<int[]> data = new ArrayList<int[]>();
+    ArrayList<Double[]> data = new ArrayList<Double[]>();
 
-    public Series(String name, ArrayList<int[]> data, String color) {
+    public Series() {
+
+    }
+
+    public Series(String name, String color, ArrayList<Double[]> data) {
         this.setName(name);
-        this.setData(data);
         this.setColor(color);
+        this.setData(data);
+
     }
 
     public void setName(String name) {
@@ -174,16 +181,16 @@ class Series {
         return color;
     }
 
-    public void setData(ArrayList<int[]> data) {
+    public void setData(ArrayList<Double[]> data) {
         this.data = data;
     }
 
-    public ArrayList<int[]> getData() {
+    public ArrayList<Double[]> getData() {
         return data;
     }
 
-    public void setType() {
-        this.type = "line";
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getType() {
@@ -214,6 +221,7 @@ public class ChartModel {
         this.plotOptions = new PlotOptions();
         this.series = series;
     }
+
     public void setXAxis(String xAxisTitle) {
         this.xAxis = new XAxis(xAxisTitle);
     }
@@ -222,6 +230,7 @@ public class ChartModel {
     public XAxis getXAxis() {
         return xAxis;
     }
+
     public void setYAxis(String yAxisTitle) {
         this.yAxis = new YAxis(yAxisTitle);
     }

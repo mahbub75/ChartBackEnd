@@ -80,7 +80,7 @@ public class FileService {
         FileSystemUtils.deleteRecursively(filePath.toFile());
     }
     public File loadFileAsFile(String fileName) {
-        return new File(env.getProperty("file.upload-dir") + "/" +fileName +".txt");
+        return new File(env.getProperty("file.upload-dir") + "/" +fileName);
     }
 
 

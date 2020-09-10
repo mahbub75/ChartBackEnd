@@ -1,15 +1,16 @@
 package Project.Files;
 
 import Project.Session.SessionRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.InputStreamResource;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
+import java.io.IOException;
+
+import com.google.gson.Gson;
+import com.restfb.json.JsonObject;
 
 @RestController
 public class FileController {
@@ -31,6 +37,8 @@ public class FileController {
     FileService fileService;
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    private Environment env;
 
 
 //    String url = "http://www.youtube-nocookie.com/embed/zaaU9lJ34c5?rel=0";
@@ -61,44 +69,55 @@ public class FileController {
     // Get a file using filename.
     @GetMapping("/file")
     @CrossOrigin
-    public ChartModel getFile(@RequestParam("fileName") String fileName) {
-        FileModel f = fileRepository.findFileModelByUniqueName(fileName);
-        ArrayList<int[]> data1 = new ArrayList<int[]>();
-        int[] d = new int[]{2, 3};
-        int[] l = new int[]{4, 9};
-        int[] h = new int[]{6, 2};
-        int[] m = new int[]{8, 5};
-        data1.add(0, d);
-        data1.add(0, l);
-        data1.add(0, h);
-        data1.add(0, m);
-        ArrayList<int[]> data2 = new ArrayList<int[]>();
-        int[] d2 = new int[]{2, 6};
-        int[] l2 = new int[]{3, 4};
-        int[] h2 = new int[]{6, 7};
-        int[] m2 = new int[]{8, 1};
-        data2.add(0, d2);
-        data2.add(0, l2);
-        data2.add(0, h2);
-        data2.add(0, m2);
-        ArrayList<int[]> data3 = new ArrayList<int[]>();
-        int[] d3 = new int[]{2, 1};
-        int[] l3 = new int[]{3, 10};
-        int[] h3 = new int[]{7, 7};
-        int[] m3 = new int[]{8, 3};
-        data3.add(0, d3);
-        data3.add(0, l3);
-        data3.add(0, h3);
-        data3.add(0, m3);
-        String color1= "rgba(255, 0, 0, .5)" ;
-        String color2= "rgba(0, 12, 255, .5)" ;
-        String color3= "rgba(9, 183, 9, .5)" ;
+    public ChartModel getFile(@RequestParam("fileName") String fileName) throws IOException, JSONException {
+        List<Series> series = new ArrayList<>();
+        File file = fileService.loadFileAsFile(fileName);
+        ArrayList<Double[]> data1 = new ArrayList<Double[]>();
+        ArrayList<Double[]> data2 = new ArrayList<Double[]>();
+        ArrayList<Double[]> data3 = new ArrayList<Double[]>();
+        String xtitle = "";
+        String ytitle = "";
+        String title = "";
+        String[] colors =new String[]{"rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)"};
+        String line;
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        while ((line = reader.readLine()) != null){
+            if(line.equals("****")){
+                break;
+            }
+            String[] parts = line.split(":", 3);
+            if(parts[0].equals("title")){
+            title= parts[1];
+            }
+            if(parts[0].equals("xtitle")){
+            xtitle= parts[1];
+            }
+            if(parts[0].equals("ytitle")){
+            ytitle= parts[1];
+            }
+            if(parts[0].equals("colors")){
+               colors= parts[1].split("-");
+            }
+        }
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",", 3);
+            if (parts.length >= 3) { ;
+                Double x1 = Double.parseDouble(parts[0].split(":",2)[0]);
+                Double y1 = Double.parseDouble(parts[0].split(":",2)[1]);
+                Double x2 = Double.parseDouble(parts[1].split(":",2)[0]);
+                Double y2 = Double.parseDouble(parts[1].split(":",2)[1]);
+                Double x3 = Double.parseDouble(parts[2].split(":",2)[0]);
+                Double y3 = Double.parseDouble(parts[2].split(":",2)[1]);
+                data1.add(0,new Double[]{x1,y1});
+                data2.add(0, new Double[]{x2,y2});
+                data3.add(0,new Double[]{x3,y3});
+            }
+        }
 
-        List<Series> series = new ArrayList<Series>();
-        series.add(new Series("canal1",data1,color1));
-        series.add(new Series("canal2",data2,color2));
-        series.add(new Series("canal3",data3, color3));
-        return new ChartModel("title", "subtitle", "yAxisTitle", "xAxisTitle", series);
+        series.add(new Series("chanel1",colors[0],data1));
+        series.add(new Series("chanel2",colors[1],data2));
+        series.add(new Series("chanel3",colors[2],data3));
+        return new ChartModel(title, "subtitle", ytitle, xtitle, series);
     }
 
 
