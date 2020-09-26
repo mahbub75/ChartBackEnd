@@ -4,8 +4,11 @@ import Project.ExceptionHandler.CustomException;
 import Project.Lesson.Lesson;
 import Project.Lesson.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +27,6 @@ public class UserController {
     }
 
 
-//    @GetMapping("user/{userId}")
-//    @CrossOrigin
-//    public User getUserById(@PathVariable int userId) {
-//        return userRepository.findOne(userId);
-//    }
 
     @DeleteMapping("user/{userId}")
     @CrossOrigin
@@ -36,30 +34,73 @@ public class UserController {
         userRepository.delete(userId);
     }
 
+    @DeleteMapping("delete-all-teams")
+    @CrossOrigin
+    public void deleteUser() {
+        List<User> users = userRepository.findByRoll("Team");
+        for (User user:users) {
+            userRepository.delete(user.getId());
+        }
+
+    }
+
     @PostMapping("team")
     @CrossOrigin
-    public void create(@RequestParam("lesson_id") int lessonId, @RequestBody Map<String, String> body)throws CustomException {
-        String name = body.get("name");
-        String roll = body.get("roll");
-        String password = body.get("password");
+    public void create(@RequestParam("lesson_id") int lessonId, @RequestBody User user) throws CustomException {
         Lesson lesson = lessonRepository.findOne(lessonId);
-        String members = body.get("members");
-        String center_id = body.get("centerId");
-        User user = new User(name, roll, password, lesson, members, center_id);
-        Boolean o = userRepository.existsByName(name);
-        if(o){
+        user.setLesson(lesson);
+        Boolean isExist = userRepository.existsByName(user.getName());
+        if (isExist) {
             throw new CustomException("نام گروه باید یکتا باشد");
         }
         userRepository.save(user);
     }
 
-//    @PostMapping("admin")
-//    public void create(@RequestBody Map<String, String> body){
-//        String name = body.get("name");
-//        String password = body.get("password");
-//        String FirstLastName = body.get("first_last_name");
-//        userRepository.save(new User(name,password,FirstLastName));
-//    }
+    @PostMapping(value = "cumulative-registration", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @CrossOrigin
+    public void teamsCumulativeRegistration(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
 
+// convert multipartFile to File
+        File file = new File(multipartFile.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(multipartFile.getBytes());
+        fos.close();
+// read file
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",", 4);
+            if (parts.length >= 4) {
+                String adminName = parts[3];
+                String studentName = parts[1];
+                String teamName = parts[2];
+                Boolean isExistTeam = this.userRepository.existsByName(teamName);
+                Boolean isExistAdmin = this.userRepository.existsByName(adminName);
+                if (isExistAdmin) {
+                    if (isExistTeam) {
+                        User team = userRepository.findByName(teamName);
+                        team.setMembers(team.getMembers() +"-"   +studentName);
+                        this.userRepository.save(team);
+                    } else {
+                        User admin = userRepository.findByName(adminName);
+                        String adminId = String.valueOf(admin.getId());
+                        Lesson lesson = lessonRepository.findByUsers(admin);
+                        this.userRepository.save(new User(teamName, "Team", "123456", lesson, studentName,adminId));
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
+
+
+@PutMapping(value="user/{userId}")
+@CrossOrigin
+    public void editUser(@PathVariable int userId,@RequestBody User user){
+        userRepository.save(user);
+}
 }

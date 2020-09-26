@@ -28,12 +28,6 @@ public class User implements Serializable {
     public User() {
     }
 
-
-    public User(String name,String password) {
-        this.setName(name);
-        this.setPassword(password);
-    }
-
     public User(String name,String roll,String password, Lesson lesson) {
         this.setName(name);
         this.setPassword(password);
