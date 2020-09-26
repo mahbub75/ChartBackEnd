@@ -15,11 +15,11 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
 class Chart {
-    String type;
+   // String type;
     String zoomType;
 
     public Chart() {
-        this.type = "spline";
+//       this.type = "spline";
         this.zoomType = "xy";
     }
 }
@@ -150,58 +150,55 @@ class PlotOptions {
 
 class Series {
     String name;
-    String type = "spline";
-    String color;
     ArrayList<Double[]> data = new ArrayList<Double[]>();
+    String dashStyle = "none";
+    //  String type = "spline";
+    String color;
+    int offSet = 0;
+  int  voltDiv = 1;
+   Boolean sign = false;
+   Boolean isChecked=true;
 
     public Series() {
 
     }
 
     public Series(String name, String color, ArrayList<Double[]> data) {
-        this.setName(name);
-        this.setColor(color);
-        this.setData(data);
-
-    }
-
-    public void setName(String name) {
         this.name = name;
+        this.color = color;
+        this.data = data;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setData(ArrayList<Double[]> data) {
-        this.data = data;
-    }
-
     public ArrayList<Double[]> getData() {
         return data;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getDashStyle() { return dashStyle; }
+
+    public String getColor() {
+        return this.color;
     }
 
-    public String getType() {
-        return type;
+    public int getOffSet() {
+        return offSet;
     }
+
+    public int getVoltDiv() { return voltDiv; }
+
+    public Boolean getIsChecked() { return isChecked; }
+
+    public Boolean getSign() { return sign; }
+
 
 }
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
-public class ChartModel {
+class ChartContent {
     Chart chart;
     Title title;
     Title subtitle;
@@ -211,10 +208,9 @@ public class ChartModel {
     PlotOptions plotOptions;
     List<Series> series;
 
-    public ChartModel(String title, String subTitle, String yAxisTitle, String xAxisTitle, List<Series> series) {
+    public ChartContent(String title, String yAxisTitle, String xAxisTitle, List<Series> series) {
         this.chart = new Chart();
         this.title = new Title(title);
-        this.subtitle = new Title(subTitle);
         this.setXAxis(xAxisTitle);
         this.setYAxis(yAxisTitle);
         this.legend = new Legend();
@@ -240,5 +236,25 @@ public class ChartModel {
         return yAxis;
     }
 
+
+}
+
+@Getter
+class ChartModel {
+   ChartContent content;
+    String description;
+
+    public ChartModel( ChartContent content,String description) {
+        this.setContent(content);
+        this.setDescription(description);
+    }
+
+    public void setContent(ChartContent content) {
+        this.content = content;
+    }
+
+    public void setDescription(String description) {
+        this.description=description;
+    }
 
 }

@@ -1,9 +1,7 @@
 package Project.Files;
 
 import Project.Session.SessionRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.InputStreamResource;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.crypto.Data;
 import java.io.IOException;
-
-import com.google.gson.Gson;
-import com.restfb.json.JsonObject;
 
 @RestController
 public class FileController {
@@ -75,49 +69,61 @@ public class FileController {
         ArrayList<Double[]> data1 = new ArrayList<Double[]>();
         ArrayList<Double[]> data2 = new ArrayList<Double[]>();
         ArrayList<Double[]> data3 = new ArrayList<Double[]>();
+        ArrayList<Double[]> data4 = new ArrayList<Double[]>();
         String xtitle = "";
         String ytitle = "";
         String title = "";
-        String[] colors =new String[]{"rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)"};
+       String description = "";
+       String[] subTitles = new String[]{"","",""};
+        String[] colors =new String[]{"rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)","rgba(255, 0, 0, .5)","rgba(25, 150, 50, .5)"};
         String line;
         BufferedReader reader = new BufferedReader(new FileReader(file));
         while ((line = reader.readLine()) != null){
             if(line.equals("****")){
                 break;
             }
-            String[] parts = line.split(":", 3);
+            String[] parts = line.split(":", 4);
             if(parts[0].equals("title")){
             title= parts[1];
             }
-            if(parts[0].equals("xtitle")){
+            else if(parts[0].equals("xtitle")){
             xtitle= parts[1];
             }
-            if(parts[0].equals("ytitle")){
+            else if(parts[0].equals("ytitle")){
             ytitle= parts[1];
+            } else if(parts[0].equals("description")){
+                description = parts[1];
             }
-            if(parts[0].equals("colors")){
+           else if(parts[0].equals("colors")){
                colors= parts[1].split("-");
+            } else if (parts[0].equals("subTitles")){
+                subTitles =  parts[1].split(",");
             }
         }
         while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(",", 3);
-            if (parts.length >= 3) { ;
+            String[] parts = line.split(",", 4);
+            if (parts.length >= 4) { ;
                 Double x1 = Double.parseDouble(parts[0].split(":",2)[0]);
                 Double y1 = Double.parseDouble(parts[0].split(":",2)[1]);
                 Double x2 = Double.parseDouble(parts[1].split(":",2)[0]);
                 Double y2 = Double.parseDouble(parts[1].split(":",2)[1]);
                 Double x3 = Double.parseDouble(parts[2].split(":",2)[0]);
                 Double y3 = Double.parseDouble(parts[2].split(":",2)[1]);
+                Double x4 = Double.parseDouble(parts[3].split(":",2)[0]);
+                Double y4 = Double.parseDouble(parts[3].split(":",2)[1]);
                 data1.add(0,new Double[]{x1,y1});
                 data2.add(0, new Double[]{x2,y2});
                 data3.add(0,new Double[]{x3,y3});
+                data4.add(0,new Double[]{x4,y4});
             }
         }
 
-        series.add(new Series("chanel1",colors[0],data1));
-        series.add(new Series("chanel2",colors[1],data2));
-        series.add(new Series("chanel3",colors[2],data3));
-        return new ChartModel(title, "subtitle", ytitle, xtitle, series);
+        series.add(new Series(subTitles[0],colors[0],data1));
+        series.add(new Series(subTitles[1],colors[1],data2));
+        series.add(new Series(subTitles[2],colors[2],data3));
+        series.add(new Series(subTitles[3],colors[3],data4));
+        ChartContent chartContent = new ChartContent(title, ytitle, xtitle, series);
+   return new ChartModel(chartContent,description);
     }
 
 

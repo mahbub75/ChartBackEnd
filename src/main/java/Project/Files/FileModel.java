@@ -5,7 +5,7 @@ import Project.Session.Session;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "chart")
+@Table(name = "file")
 public class FileModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
