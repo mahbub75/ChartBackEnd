@@ -1,7 +1,6 @@
 package Project.Session;
 
 import Project.Files.FileModel;
-import Project.Lesson.Lesson;
 import Project.User.User;
 
 import javax.persistence.*;

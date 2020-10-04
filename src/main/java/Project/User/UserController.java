@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserController {
@@ -98,9 +97,10 @@ public class UserController {
 
 
 
-@PutMapping(value="user/{userId}")
+@PutMapping(value="user")
 @CrossOrigin
-    public void editUser(@PathVariable int userId,@RequestBody User user){
+    public void editUser(@RequestBody User user){
+        System.out.print(user);
         userRepository.save(user);
 }
 }

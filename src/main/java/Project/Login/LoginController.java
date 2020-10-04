@@ -4,7 +4,6 @@ import Project.ExceptionHandler.CustomException;
 import Project.User.User;
 import Project.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -29,7 +28,7 @@ public class LoginController {
                throw new CustomException("رمز عبور اشتباه است");
            }
         } else {
-            throw new CustomException("کاربر"+name+" در سیستم ثبت نشده است");
+            throw new CustomException("کاربر در سیستم ثبت نشده است");
         }
 
 

@@ -31,12 +31,9 @@ public class FileController {
     FileService fileService;
     @Autowired
     SessionRepository sessionRepository;
-    @Autowired
-    private Environment env;
 
 
-//    String url = "http://www.youtube-nocookie.com/embed/zaaU9lJ34c5?rel=0";
-//    String str = url.substring(url.lastIndexOf("/") + 1, url.indexOf("?"));
+
 
     // Get all files from DB
     @GetMapping(value = "/files")

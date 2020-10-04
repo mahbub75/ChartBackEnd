@@ -2,7 +2,6 @@ package Project.Files;
 
 import Project.Session.Session;
 import Project.Session.SessionRepository;
-import Project.Share.CurrentDateTime;
 import Project.User.User;
 import Project.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,6 @@ import java.nio.file.StandardCopyOption;
 public class FileService {
     @Autowired
     private Environment env;
-    @Autowired
-    private CurrentDateTime currentDateTime;
     @Autowired
     SessionRepository sessionRepository;
     @Autowired

@@ -1,7 +1,6 @@
 package Project.Lesson;
 
-import Project.Files.Pair;
-import Project.Session.Session;
+
 import Project.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
