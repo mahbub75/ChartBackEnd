@@ -15,11 +15,11 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
 class Chart {
-   // String type;
+    String type;
     String zoomType;
 
     public Chart() {
-//       this.type = "spline";
+       this.type = "spline";
         this.zoomType = "xy";
     }
 }
@@ -72,10 +72,8 @@ class Legend {
 
     public Legend() {
         this.layout = "vertical";
-        this.align = "center";
-        this.verticalAlign = "top";
-        this.x = 100;
-        this.y = 70;
+        this.align = "right";
+        this.verticalAlign = "bottom";
         this.floating = true;
         this.backgroundColor = "#FFFFFF";
         this.borderWidth = 1;
@@ -115,7 +113,7 @@ class Marker {
 }
 
 @Getter
-class Tooltip {
+class  Tooltip {
     String headerFormat;
     String pointFormat;
 

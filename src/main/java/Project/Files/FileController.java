@@ -60,9 +60,10 @@ public class FileController {
     // Get a file using filename.
     @GetMapping("/file")
     @CrossOrigin
-    public ChartModel getFile(@RequestParam("fileName") String fileName) throws IOException, JSONException {
+    public ChartModel getFile(@RequestParam("fileName") String uniqueName) throws IOException, JSONException {
+        FileModel fileModel = this.fileRepository.findFileModelByUniqueName(uniqueName);
         List<Series> series = new ArrayList<>();
-        File file = fileService.loadFileAsFile(fileName);
+        File file = fileService.loadFileAsFile(uniqueName);
         ArrayList<Double[]> data1 = new ArrayList<Double[]>();
         ArrayList<Double[]> data2 = new ArrayList<Double[]>();
         ArrayList<Double[]> data3 = new ArrayList<Double[]>();
@@ -81,9 +82,9 @@ public class FileController {
             }
             String[] parts = line.split(":", 4);
             if(parts[0].equals("title")){
-            title= parts[1];
+            title= fileModel.getName();
             }
-            else if(parts[0].equals("xtitle")){
+            if(parts[0].equals("xtitle")){
             xtitle= parts[1];
             }
             else if(parts[0].equals("ytitle")){
@@ -99,19 +100,30 @@ public class FileController {
         }
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",", 4);
-            if (parts.length >= 4) { ;
-                Double x1 = Double.parseDouble(parts[0].split(":",2)[0]);
-                Double y1 = Double.parseDouble(parts[0].split(":",2)[1]);
-                Double x2 = Double.parseDouble(parts[1].split(":",2)[0]);
-                Double y2 = Double.parseDouble(parts[1].split(":",2)[1]);
-                Double x3 = Double.parseDouble(parts[2].split(":",2)[0]);
-                Double y3 = Double.parseDouble(parts[2].split(":",2)[1]);
-                Double x4 = Double.parseDouble(parts[3].split(":",2)[0]);
-                Double y4 = Double.parseDouble(parts[3].split(":",2)[1]);
-                data1.add(0,new Double[]{x1,y1});
-                data2.add(0, new Double[]{x2,y2});
-                data3.add(0,new Double[]{x3,y3});
-                data4.add(0,new Double[]{x4,y4});
+            if (parts.length >= 4) {
+                if(!parts[0].equals("")){
+                    Double x1 = Double.parseDouble(parts[0].split(":",2)[0]);
+                    Double y1 = Double.parseDouble(parts[0].split(":",2)[1]);
+                    data1.add(0,new Double[]{x1,y1});
+                }
+                if(!parts[1].equals("")){
+                    Double x2 = Double.parseDouble(parts[1].split(":",2)[0]);
+                    Double y2 = Double.parseDouble(parts[1].split(":",2)[1]);
+                    data2.add(0, new Double[]{x2,y2});
+                }
+                if(!parts[2].equals("")){
+                    Double x3 = Double.parseDouble(parts[2].split(":",2)[0]);
+                    Double y3 = Double.parseDouble(parts[2].split(":",2)[1]);
+                    data3.add(0,new Double[]{x3,y3});
+                }
+                if(!parts[3].equals("")){
+                    Double x4 = Double.parseDouble(parts[3].split(":",2)[0]);
+                    Double y4 = Double.parseDouble(parts[3].split(":",2)[1]);
+                    data4.add(0,new Double[]{x4,y4});
+                }
+
+
+
             }
         }
 

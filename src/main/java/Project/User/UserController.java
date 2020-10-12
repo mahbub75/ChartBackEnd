@@ -100,7 +100,10 @@ public class UserController {
 @PutMapping(value="user")
 @CrossOrigin
     public void editUser(@RequestBody User user){
-        System.out.print(user);
+    Boolean isExist = userRepository.existsByName(user.getName());
+    if (isExist) {
+        throw new CustomException("نام گروه باید یکتا باشد");
+    }
         userRepository.save(user);
 }
 }

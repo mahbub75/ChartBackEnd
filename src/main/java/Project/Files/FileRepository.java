@@ -7,5 +7,6 @@ import java.util.List;
 @Repository
 public interface FileRepository extends JpaRepository<FileModel,Integer> {
     List<FileModel> findFileModelsBySessionId(int sessionId);
+    FileModel findFileModelByUniqueName(String uniqueName);
     Boolean existsByUniqueName(String uniqueName);
 }

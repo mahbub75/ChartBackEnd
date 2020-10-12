@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.regex.Pattern;
 
 @Service
 public class FileService {
@@ -37,7 +38,7 @@ public class FileService {
         String[] nameParts = fileUniqueName.split("&");
         String creationDate = nameParts[1];
         String teamName = nameParts[0];
-        String subject = nameParts[2];
+        String subject = nameParts[2].split(Pattern.quote("."))[0];
         Boolean isSaved = false;
         if (!fileRepository.existsByUniqueName(fileUniqueName)) {
             Session session;
